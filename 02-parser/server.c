@@ -6,6 +6,7 @@
 #include "server.h" // Include the server header file
 
 #define BUFFER_SIZE 1024 // Define a buffer size for reading data
+
 const char* handle_command(const char* input){
     if(strncmp(input, "PING", 4) == 0){// Check for "PING" command
         return "+PONG\r\n";
@@ -15,6 +16,7 @@ const char* handle_command(const char* input){
         return "-ERR\r\n"; // Return error for unknown command
     }
 }
+
 void start_server(int port){
     int server_fd, client_fd;
     struct sockaddr_in addr; // Define a structure for the server address
