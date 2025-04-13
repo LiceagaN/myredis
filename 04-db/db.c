@@ -45,3 +45,29 @@ const char* hashmap_get(HashMap* map, const char* key){
     }
     return NULL; // Return NULL if not found
 }
+
+int hashmap_exists(HashMap* map, const char* key){
+    unsigned long idx = hash(key);
+    while(map->entries[idx].key != NULL){
+        if(strcmp(map->entries[idx].key, key) == 0){
+            return 1;
+        }
+        idx = (idx + 1) % TABLE_SIZE; // Linear probing
+    }
+    return 0; // Return 0 if not found
+}
+
+int hashmap_del(HashMap* map, const char* key){
+    unsigned long idx = hash(key);
+    while(map->entries[idx].key != NULL){
+        if(strcmp(map->entries[idx].key, key) == 0){
+            free(map->entries[idx].key); // Free the key
+            free(map->entries[idx].value); // Free the value
+            map->entries[idx].key = NULL; // Mark the entry as deleted
+            map->entries[idx].value = NULL; // Mark the entry as deleted
+            return 1; // Return 1 if deleted successfully
+        }
+        idx = (idx + 1) % TABLE_SIZE; // Linear probing
+    }
+    return 0; // Return 0 if not found
+}

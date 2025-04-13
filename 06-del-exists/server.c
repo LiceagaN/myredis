@@ -41,7 +41,6 @@ const char* handle_command(int argc, char* argv[]) {
         } else {
             return "$-1\r\n";
         }
-
     } else if(strcmp(argv[0],"DEL") == 0 && argc == 2){
         int deleted = hashmap_del(&db, argv[1]);
         static char response[BUFFER_SIZE];
@@ -54,6 +53,7 @@ const char* handle_command(int argc, char* argv[]) {
     } else {
         return "-ERR unknown command\r\n";
     }
+    return "-ERR unknown command\r\n";
 }
 
 void start_server(int port) {
