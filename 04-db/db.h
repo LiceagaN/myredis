@@ -21,7 +21,7 @@ int hashmap_del(HashMap* map, const char* key);
 int hashmap_exists(HashMap* map, const char* key);
 int hashmap_expire(HashMap* map, const char* key, int seconds);
 int hashmap_ttl(HashMap* map, const char* key);
-
-
+int hashmap_save(HashMap* map, const char* filename);
+int hashmap_load(HashMap* map, const char* filename);
 
 #endif

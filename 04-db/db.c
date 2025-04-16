@@ -103,3 +103,41 @@ int hashmap_ttl(HashMap* map, const char* key){
     }
     return -2;   
 }
+
+int hashmap_save(HashMap* map, const char* filename){
+    FILE* file = fopen(filename, "wb");
+    if(!file) return 0; // Return 0 if file opening fails
+
+    for(int i = 0; i< TABLE_SIZE; i++){
+        Entry entry = map->entries[i];
+        if(entry.key && entry.value){
+            fprintf(file, "%s|%s|%ld\n", entry.key, entry.value, entry.expire_at);
+        }
+    }
+    fclose(file); // Close the file
+    return 1; // Return 1 if saved successfully
+}
+
+int hashmap_load(HashMap* map, const char* filename){
+    FILE* file = fopen(filename, "wb");
+    if(!file) return 0;
+
+    hashmap_init(map); // Initialize the map
+
+    char line[256];
+
+    while(fgets(line, sizeof(line), file)){
+        char* key = strtok(line, "|"); // Get the key
+        char* value = strtok(NULL, "|"); // Get the value
+        char* expire_at_str = strtok(NULL, "|");
+
+        if(key && value && expire_at_str){
+            Entry* entry = &map->entries[hash(key)];// Get the entry
+            entry->key = strdup(key); // Duplicate the key
+            entry->value = strdup(value); // Duplicate the value
+            entry->expire_at = atol(expire_at_str); // Convert the expiration time to long
+        }
+    }
+    fclose(file); // Close the file
+    return 1; // Return 1 if loaded successfully
+}
